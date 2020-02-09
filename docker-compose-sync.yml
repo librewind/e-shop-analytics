@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+    php:
+        volumes:
+            - ./composer.json:/var/www/html/composer.json
+            - ./composer.lock:/var/www/html/composer.lock
+            - e-shop-analytics-data-sync:/var/www/html:nocopy
+
+volumes:
+    e-shop-analytics-data-sync:
+        external: true
