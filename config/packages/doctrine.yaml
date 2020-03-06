@@ -1,0 +1,43 @@
+parameters:
+    env(POSTGRES_DB): ''
+    env(POSTGRES_HOST): ''
+    env(POSTGRES_USER): ''
+    env(POSTGRES_PASSWORD): ''
+    env(CLICKHOUSE_DB): ''
+    env(CLICKHOUSE_HOST): ''
+    env(CLICKHOUSE_USER): ''
+    env(CLICKHOUSE_PASSWORD): ''
+doctrine:
+    dbal:
+        default_connection: postgres
+        connections:
+            postgres:
+                driver: 'pdo_pgsql'
+                server_version: '11.7'
+                dbname: '%env(POSTGRES_DB)%'
+                host: '%env(POSTGRES_HOST)%'
+                port: 5432
+                user: '%env(POSTGRES_USER)%'
+                password: '%env(POSTGRES_PASSWORD)%'
+            clickhouse:
+                dbname: '%env(CLICKHOUSE_DB)%'
+                host: '%env(CLICKHOUSE_HOST)%'
+                port: 8123
+                user: '%env(CLICKHOUSE_USER)%'
+                password: '%env(CLICKHOUSE_PASSWORD)%'
+                driver_class: FOD\DBALClickHouse\Driver
+                wrapper_class: FOD\DBALClickHouse\Connection
+                options:
+                    enable_http_compression: 1
+                    max_execution_time: 60
+    orm:
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            Sales:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Sales/Entity'
+                prefix: 'App\Sales\Entity'
+                alias: Sales

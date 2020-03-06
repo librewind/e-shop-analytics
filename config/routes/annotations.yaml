@@ -1,0 +1,9 @@
+infrastructure_controllers:
+    resource: ../../src/Infrastructure/Controller/
+    type: annotation
+analytics_controllers:
+    resource: ../../src/Analytics/Controller/
+    type: annotation
+sales_controllers:
+    resource: ../../src/Sales/Controller/
+    type: annotation

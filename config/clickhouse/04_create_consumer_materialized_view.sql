@@ -1,0 +1,1 @@
+CREATE MATERIALIZED VIEW eshop.consumer TO eshop.fact_sale AS SELECT * FROM eshop.queue;

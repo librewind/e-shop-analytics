@@ -1,4 +1,4 @@
-FROM php:7.4.2-fpm-alpine
+FROM php:7.4.3-fpm-alpine
 
 RUN apk add --no-cache \
     git \
@@ -12,7 +12,33 @@ RUN docker-php-ext-install \
     opcache \
     pdo \
     pdo_pgsql \
-    zip
+    zip \
+    bcmath \
+    sockets
+
+ENV LIBRDKAFKA_VERSION v0.9.5
+ENV BUILD_DEPS \
+    autoconf \
+    bash \
+    build-base \
+    git \
+    pcre-dev \
+    python
+
+RUN apk --no-cache --virtual .build-deps add ${BUILD_DEPS} \
+    && cd /tmp \
+    && git clone \
+        --branch ${LIBRDKAFKA_VERSION} \
+        --depth 1 \
+        https://github.com/edenhill/librdkafka.git \
+    && cd librdkafka \
+    && ./configure \
+    && make \
+    && make install \
+    && pecl install rdkafka-3.1.2 \
+    && docker-php-ext-enable rdkafka \
+    && rm -rf /tmp/librdkafka \
+    && apk del .build-deps
 
 # Uncomment code below for enabling xDebug
 # or delete it with the xdebug.ini file
@@ -42,5 +68,9 @@ RUN if [ ! -z "${HOST_UID}" ]; then \
 
 ENV WWW_DATA_UID ${HOST_UID}
 
-COPY ./symfony.ini /usr/local/etc/php/conf.d/
-COPY ./symfony.pool.conf /usr/local/etc/php-fpm.d/
+# Use the default production configuration
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+RUN echo 'memory_limit = 4096M' > $PHP_INI_DIR/conf.d/docker-php-ini-memory-limit.ini;
+COPY ./symfony.ini $PHP_INI_DIR/conf.d/
+COPY ./opcache.ini $PHP_INI_DIR/conf.d/
+COPY ./symfony.pool.conf /usr/local/etc/php-fpm.d/www.conf

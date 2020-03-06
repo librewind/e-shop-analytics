@@ -53,9 +53,46 @@ services:
             - "9000:9000"
         volumes:
             - clickhouse:/var/lib/clickhouse
+    postgres:
+        image: postgres:11.7
+        container_name: e-shop-analytics-postgres
+        networks:
+            - local
+        ports:
+            - "${EXTERNAL_POSTGRES_PORT}:5432"
+        volumes:
+            - postgres:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_DB
+            - POSTGRES_USER
+            - POSTGRES_PASSWORD
+    zookeeper:
+        image: wurstmeister/zookeeper
+        container_name: e-shop-analytics-zookeeper
+        networks:
+            - net
+            - local
+        ports:
+            - "2181:2181"
+    kafka:
+        image: wurstmeister/kafka
+        container_name: e-shop-analytics-kafka
+        networks:
+            net:
+                aliases:
+                    - e-shop-analytics-kafka
+            local:
+        ports:
+            - "9092:9092"
+        environment:
+            - KAFKA_ADVERTISED_HOST_NAME=e-shop-analytics-kafka
+            - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+            - KAFKA_ADVERTISED_PORT=9092
 volumes:
     clickhouse:
         name: e-shop-analytics-clickhouse
+    postgres:
+        name: e-shop-analytics-postgres
 networks:
     net:
         name: e-shop-net

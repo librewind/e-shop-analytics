@@ -1,0 +1,8 @@
+enqueue:
+    default:
+        transport:
+            dsn: 'rdkafka://'
+            global:
+                group.id: 'group1'
+                metadata.broker.list: 'kafka'
+        client: null
