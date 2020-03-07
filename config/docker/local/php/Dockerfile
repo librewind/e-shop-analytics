@@ -70,7 +70,6 @@ ENV WWW_DATA_UID ${HOST_UID}
 
 # Use the default production configuration
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
-RUN echo 'memory_limit = 4096M' > $PHP_INI_DIR/conf.d/docker-php-ini-memory-limit.ini;
 COPY ./symfony.ini $PHP_INI_DIR/conf.d/
 COPY ./opcache.ini $PHP_INI_DIR/conf.d/
 COPY ./symfony.pool.conf /usr/local/etc/php-fpm.d/www.conf
