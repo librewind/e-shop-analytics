@@ -1,0 +1,4 @@
+[Connection: close]
+[Host: localhost]
+[Cookie: None]
+0 /api/sales

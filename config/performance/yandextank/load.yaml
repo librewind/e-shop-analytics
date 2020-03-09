@@ -1,0 +1,11 @@
+phantom:
+    address: localhost:8001 # [Target's address]:[target's port]
+    ammofile: ammo.txt
+    ammo_type: uripost
+    load_profile:
+        load_type: rps # schedule load by defining requests per second
+        schedule: line(45, 60, 10m)
+console:
+    enabled: true # enable console output
+telegraf:
+    enabled: false
