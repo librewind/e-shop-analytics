@@ -19,7 +19,22 @@ final class ClickHouseFactSaleRepository implements FactSaleRepositoryInterface
     public function getCountUniqCustomersPerDayByPromotionId(int $promotionId): array
     {
         $result = $this->connection->fetchAll(
-            'SELECT date, CAST(uniqCombined(customer_id) AS UInt32) AS count_customer FROM fact_sale WHERE promotion_id = :promotionId GROUP BY date ORDER BY date DESC',
+            'SELECT date, CAST(count(distinct(customer_id)) AS UInt32) AS count_customer FROM fact_sale WHERE promotion_id = :promotionId GROUP BY date ORDER BY date DESC',
+            [
+                'promotionId' => $promotionId,
+            ],
+            [
+                'promotionId' => ParameterType::INTEGER,
+            ]
+        );
+
+        return $result;
+    }
+
+    public function getCountSoldProductsPerDayByPromotionId(int $promotionId): array
+    {
+        $result = $this->connection->fetchAll(
+            'SELECT date, CAST(sum(quantity) AS UInt32) AS count_sold_products FROM fact_sale WHERE promotion_id = :promotionId GROUP BY date ORDER BY date DESC',
             [
                 'promotionId' => $promotionId,
             ],

@@ -26,4 +26,16 @@ final class PostgresFactSaleRepository implements FactSaleRepositoryInterface
 
         return $result;
     }
+
+    public function getCountSoldProductsPerDayByPromotionId(int $promotionId): array
+    {
+        $result = $this->connection->fetchAll(
+            'SELECT date, sum(quantity) AS count_sold_products FROM fact_sale WHERE promotion_id = :promotionId GROUP BY date ORDER BY date DESC',
+            [
+                'promotionId' => $promotionId,
+            ]
+        );
+
+        return $result;
+    }
 }

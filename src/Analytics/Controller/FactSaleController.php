@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Analytics\Controller;
 
+use App\Analytics\Form\Type\GetCountSoldProductsPerDayByPromotionIdType;
 use App\Analytics\Form\Type\GetCountUniqCustomersPerDayByPromotionIdType;
 use App\Analytics\Repository\FactSaleRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,5 +37,24 @@ final class FactSaleController extends AbstractController
         $countUniqCustomersPerDayByPromotionId = $this->factSaleRepository->getCountUniqCustomersPerDayByPromotionId($promotionId);
 
         return $countUniqCustomersPerDayByPromotionId;
+    }
+
+    /**
+     * @Route(path="/api/reports/count-sold-products-per-day-by-promotion", methods={"GET"})
+     */
+    public function getCountSoldProductsPerDayByPromotionId(Request $request)
+    {
+        $form = $this->createForm(GetCountSoldProductsPerDayByPromotionIdType::class);
+        $form->submit($request->query->all());
+        if (!$form->isValid()) {
+            return $form;
+        }
+
+        $data = $form->getData();
+        $promotionId = $data['promotionId'];
+
+        $countSoldProductsPerDayByPromotionId = $this->factSaleRepository->getCountSoldProductsPerDayByPromotionId($promotionId);
+
+        return $countSoldProductsPerDayByPromotionId;
     }
 }
