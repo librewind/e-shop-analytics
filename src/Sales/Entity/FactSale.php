@@ -8,6 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
+ * @ORM\Table(
+ *     indexes={
+ *         @ORM\Index(name="promotion_date_idx", columns={"promotion_id", "date"})
+ *     }
+ * )
  */
 final class FactSale
 {
