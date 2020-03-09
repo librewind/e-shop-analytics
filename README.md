@@ -73,3 +73,14 @@ Read messages from queue:
 ```bash
 kafkacat -b localhost:9092 -t fact_sales
 ```
+
+###Yandex Tank
+
+Start:
+```bash
+docker run \
+    -v $(pwd):/var/loadtest \
+    -v $SSH_AUTH_SOCK:/ssh-agent -e SSH_AUTH_SOCK=/ssh-agent \
+    --net host \
+    -it direvius/yandex-tank
+```
