@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class SalesController extends AbstractController
 {
-    private const SALES_COUNT_PER_CONSUMER = 50;
+    private const SALES_COUNT_PER_CONSUMER = 5;
 
     private SalesGeneratorInterface $salesGenerator;
 
