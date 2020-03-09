@@ -53,6 +53,7 @@ services:
             - "9000:9000"
         volumes:
             - clickhouse:/var/lib/clickhouse
+            - clickhouse-config:/etc/clickhouse-server
     postgres:
         image: postgres:11.7
         container_name: e-shop-analytics-postgres
@@ -88,9 +89,18 @@ services:
             - KAFKA_ADVERTISED_HOST_NAME=e-shop-analytics-kafka
             - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
             - KAFKA_ADVERTISED_PORT=9092
+    tabix:
+        image: spoonest/clickhouse-tabix-web-client
+        container_name: e-shop-analytics-tabix
+        ports:
+            - "${TABIX_HTTP_PORT}:80"
+        environment:
+            - CH_HOST=clickhouse:8123
 volumes:
     clickhouse:
         name: e-shop-analytics-clickhouse
+    clickhouse-config:
+        name: e-shop-analytics-clickhouse-config
     postgres:
         name: e-shop-analytics-postgres
 networks:
