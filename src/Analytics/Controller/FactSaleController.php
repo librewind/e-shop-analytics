@@ -34,9 +34,7 @@ final class FactSaleController extends AbstractController
         $data = $form->getData();
         $promotionId = $data['promotionId'];
 
-        $countUniqCustomersPerDayByPromotionId = $this->factSaleRepository->getCountUniqCustomersPerDayByPromotionId($promotionId);
-
-        return $countUniqCustomersPerDayByPromotionId;
+        return $this->factSaleRepository->getCountUniqCustomersPerDayByPromotionId($promotionId);
     }
 
     /**
@@ -53,8 +51,14 @@ final class FactSaleController extends AbstractController
         $data = $form->getData();
         $promotionId = $data['promotionId'];
 
-        $countSoldProductsPerDayByPromotionId = $this->factSaleRepository->getCountSoldProductsPerDayByPromotionId($promotionId);
+        return $this->factSaleRepository->getCountSoldProductsPerDayByPromotionId($promotionId);
+    }
 
-        return $countSoldProductsPerDayByPromotionId;
+    /**
+     * @Route(path="/api/reports/net-sales-per-day", methods={"GET"})
+     */
+    public function getNetSalesPerDay()
+    {
+        return $this->factSaleRepository->getNetSalesPerDay();
     }
 }
